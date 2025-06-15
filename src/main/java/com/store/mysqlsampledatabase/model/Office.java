@@ -1,11 +1,11 @@
 package com.store.mysqlsampledatabase.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -39,5 +39,9 @@ public class Office {
 
     @Column(name = "territory", nullable = false, length = 10)
     private String territory;
+
+    @OneToMany(mappedBy="office", fetch = FetchType.LAZY,cascade=CascadeType.ALL)
+    @JsonManagedReference
+    private List<Employee> employees;
 
 }
