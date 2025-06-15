@@ -1,5 +1,7 @@
 package com.store.mysqlsampledatabase.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +15,6 @@ import java.util.Set;
 public class Employee {
     @Id
     @Column(name = "employeeNumber", nullable = false)
-    // Add this if employeeNumber is auto-generated in your database
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
@@ -29,9 +30,9 @@ public class Employee {
     @Column(name = "email", nullable = false, length = 100)
     private String email;
 
-    // Fixed: Better property name
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "officeCode", nullable = false)
+    @JsonBackReference
     private Office office;
 
     // Self referencing relationship
@@ -42,6 +43,7 @@ public class Employee {
     // Fixed: Added mappedBy to establish bidirectional relationship
     // This tells Hibernate that the relationship is managed by the 'salesRepresentative' field in Customer
     @OneToMany(mappedBy = "salesRepresentative", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<Customer> customers;
 
     @Column(name = "jobTitle", nullable = false, length = 50)
