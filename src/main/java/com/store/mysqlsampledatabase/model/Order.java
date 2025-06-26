@@ -1,10 +1,13 @@
 package com.store.mysqlsampledatabase.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,6 +15,7 @@ import java.time.LocalDate;
 @Table(name = "orders")
 public class Order {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orderNumber", nullable = false)
     private Integer id;
 
@@ -33,6 +37,11 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "customerNumber", nullable = false)
-    private Customer customerNumber;
+    private Customer customer;
+
+    //order has a many-many relationship with product through orderDetail
+    @OneToMany(mappedBy = "order",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Orderdetail> orderdetails;
 
 }
