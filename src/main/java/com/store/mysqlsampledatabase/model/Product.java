@@ -1,10 +1,12 @@
 package com.store.mysqlsampledatabase.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -40,5 +42,15 @@ public class Product {
 
     @Column(name = "MSRP", nullable = false, precision = 10, scale = 2)
     private BigDecimal msrp;
+
+    @Lob
+    @Column(name = "imageUrl")
+    private String imageUrl;
+
+
+    //A product can be in many orderDetails
+    @OneToMany(mappedBy ="product",fetch=FetchType.LAZY,cascade=CascadeType.ALL)
+    @JsonIgnore()
+    private Set<Orderdetail> orderdetails;
 
 }
