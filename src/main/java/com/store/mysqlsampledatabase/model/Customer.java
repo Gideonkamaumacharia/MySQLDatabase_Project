@@ -1,11 +1,15 @@
 package com.store.mysqlsampledatabase.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -13,7 +17,7 @@ import java.math.BigDecimal;
 @Table(name = "customers")
 public class Customer {
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customerNumber",nullable = false)
     private Integer customerNumber;
 
@@ -47,12 +51,16 @@ public class Customer {
     @Column(name = "country", nullable = false, length = 50)
     private String country;
 
-    // Fixed: Better property name and relationship mapping
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "salesRepEmployeeNumber")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonBackReference
     private Employee salesRepresentative;
 
     @Column(name = "creditLimit", precision = 10, scale = 2)
     private BigDecimal creditLimit;
+
+    @OneToMany(mappedBy = "customer",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Order> orders;
 }
