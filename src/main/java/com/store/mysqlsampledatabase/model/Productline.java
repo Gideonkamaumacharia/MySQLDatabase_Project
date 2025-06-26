@@ -26,6 +26,9 @@ public class Productline {
     @Column(name = "image")
     private byte[] image;
 
+    @Column(name = "imageUrl")
+    private String imageUrl;
+
     @OneToMany(mappedBy = "productLine",fetch=FetchType.LAZY,cascade=CascadeType.ALL)
     @JsonIgnore
     private List<Product> products;
