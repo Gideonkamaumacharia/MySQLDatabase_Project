@@ -14,7 +14,7 @@ import java.util.NoSuchElementException;
 @Service
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
-     private final EmployeeRepository employeeRepository;
+    private final EmployeeRepository employeeRepository;
 
     @Override
     public List<Customer> getCustomers() {
@@ -22,13 +22,15 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer saveCustomer(Customer customer){
-        if(customer.getSalesRepresentative() != null){
-            Employee employee = employeeRepository.findById(customer.getSalesRepresentative().getId())
-                    .orElseThrow(() -> new NoSuchElementException("Employee Not found!!!"));
-            customer.setSalesRepresentative(employee);
-        }
+    public Customer saveCustomer(Customer customer) {
         return customerRepository.save(customer);
     }
+
+    @Override
+    public Customer getCustomer(int customerNumber) {
+        return customerRepository.findById(customerNumber)
+                .orElseThrow(() -> new RuntimeException("Product not found with ID: " + customerNumber));
+    }
+
 }
 
